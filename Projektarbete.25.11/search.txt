@@ -1,0 +1,26 @@
+<td>" . $row['Setname'] . "</td>
+
+
+$link = "http://www.itn.liu.se/~stegu76/img.bricklink.com/";
+                $value = $_GET["search"] ?? NULL;
+
+                $connection	= mysqli_connect("mysql.itn.liu.se","lego","","lego");
+                $question = "SELECT sets.SetID, sets.Setname, images.ItemID, images.has_gif from sets, images where images.ItemID=sets.SetID and SetID or Setname like '%$value%'";
+
+                $result	= mysqli_query($connection, $question);	
+                while ($row = mysqli_fetch_array($result))	{
+                    $setid = $row ['SetID'];
+                    $itemID = $row ['ItemID'];
+                    $gif = $row ['has_gif'];
+                    $setname = $row ['Setname'];
+                    $url = "S/$itemID";
+                    if($gif){
+                        $url .= ".gif";
+                    }
+                    else{
+                        $url .= ".jpg";
+                    }
+                    $image = "<img src='$link$url' alt = '' >";
+                    echo "<tr>      <td>" . $row['Setname'] . "</td>   <td>" . $row['SetID'] . "</td>  <td>" . $row['ItemID'] . "</td>  <td>" . $url . "</td><td>$image</td></tr>\n";	
+                }
+                
